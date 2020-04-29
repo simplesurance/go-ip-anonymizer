@@ -1,37 +1,43 @@
-# Go IP Anonymizer
+# IP Anonymizer for Golang
 
-This library is built to give users more privacy by masking their IP address.
+This Golang package provides functionality to anonymize IP-Addresses.
+IP-Addresses are anonymities by zeroing the host-part of an address.
 
-IPv4 and IPv6 addresses are supported. 
-
-Default subnet for IPv4 is `/24` and for IPv6 is `/64`. Those can be changed when library is initialized.
+The host part of addresses that are anonymities be specified by providing a
+subnet mask.
 
 ## Example
+
 ```go
 package main
 
 import (
-	"log"
+    "fmt"
+    "net"
+    "os"
 
-	goanonymizer "github.com/simplesurance/go-ip-anonymizer"
+    "github.com/simplesurance/go-ip-anonymizer/ipanonymizer"
 )
 
 func main() {
-	ip4 := "192.168.1.12"
-	ip6 := "bbd1:e95a:adbb:b29a:e38b:577f:6f9a:1fa7"
-	
-	newIP4, err := goanonymizer.NewAnonymize("","").AnonymizeIp(ip4)
-	if err != nil{
-		log.Println(err)
-	}
+    const ip4 = "192.168.1.12"
+    const ip6 = "bbd1:e95a:adbb:b29a:e38b:577f:6f9a:1fa7"
 
-	newIP6, err := goanonymizer.NewAnonymize("","").AnonymizeIp(ip6)
-	if err != nil{
-		log.Println(err)
-	}
+    // Create an anonymizer with a /16 IPv6 subnet mask and
+    // a /64 IPv6 // subnet mask.
+    anonymizer := ipanonymizer.NewWithMask(
+        net.CIDRMask(16, 32),
+        net.CIDRMask(64, 128),
+    )
 
-	log.Printf("%s is transformed to %s", ip4, newIP4) //192.168.1.12 is transformed to 192.168.1.0
-	log.Printf("%s is transformed to %s", ip6, newIP6) //bbd1:e95a:adbb:b29a:e38b:577f:6f9a:1fa7 is transformed to bbd1:e95a:adbb:b29a::
+    anonIP4, err := anonymizer.IPString(ip4)
+    exitOnErr(err)
+    fmt.Printf("%s anonymized to %s\n", ip4, anonIP4)
+    // Prints: 192.168.1.12 anonymized to 192.168.0.0
 
+    anonIP6, err := anonymizer.IPString(ip6)
+    exitOnErr(err)
+    fmt.Printf("%s anonymized to %s\n", ip6, anonIP6)
+    // Prints: bbd1:e95a:adbb:b29a:e38b:577f:6f9a:1fa7 anonymized to bbd1:e95a:adbb:b29a::
 }
 ```
