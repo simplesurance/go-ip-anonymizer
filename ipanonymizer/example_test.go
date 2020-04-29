@@ -5,7 +5,7 @@ import (
 	"net"
 	"os"
 
-	"github.com/simplesurance/goanonymizer/ipanonymizer"
+	"github.com/simplesurance/go-ip-anonymizer/ipanonymizer"
 )
 
 func exitOnErr(err error) {

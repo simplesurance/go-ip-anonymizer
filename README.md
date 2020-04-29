@@ -16,7 +16,7 @@ import (
     "net"
     "os"
 
-    "github.com/simplesurance/goanonymizer/ipanonymizer"
+    "github.com/simplesurance/goanonymizer/go-ip-anonymizer"
 )
 
 func main() {
