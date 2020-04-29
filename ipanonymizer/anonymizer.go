@@ -53,8 +53,8 @@ type ipVersion int
 
 const (
 	ipVersionUndefined ipVersion = iota
-	ipv4                         = iota
-	ipv6                         = iota
+	ipv4
+	ipv6
 )
 
 func ipVer(ipAddress string) ipVersion {
